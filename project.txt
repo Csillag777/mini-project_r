@@ -1,0 +1,49 @@
+library(dplyr)
+library(stringr)
+library(data.table)
+library(ggplot2)
+df106 <- fread("106_students.csv", h = T, encoding = 'UTF-8')
+df105 <- fread("105_students.csv", h = T, encoding = 'UTF-8')
+df104 <- fread("104_students.csv", h = T, encoding = 'UTF-8')
+df103 <- fread("103_students.csv", h = T, encoding = 'UTF-8')
+df106 <- data.frame(df106)
+df105 <- data.frame(df105)
+df104 <- data.frame(df104)
+df103 <- data.frame(df103)
+
+d106 = df106[df106$"等級別"=="B 學士"&df106$"學校代碼"=="7",]
+d105 = df105[df106$"等級別"=="B 學士"&df106$"學校代碼"=="7",]
+d104 = df104[df106$"等級別"=="B 學士"&df106$"學校代碼"=="7",]
+d103 = df103[df106$"等級別"=="B 學士"&df106$"學校代碼"=="7",]
+n106 = nrow(d106)
+n105 = nrow(d105)
+n104 = nrow(d104)
+n103 = nrow(d103)
+d1 = data.frame()
+for (i in c(1:n)){
+a1 = d106[i,]$"延修生男生"
+a2 = d106[i,]$"延修生女生"
+a3 = d106[i,]$"一年級男生"
+a4 = d106[i,]$"一年級女生"
+if (a1 == "-"){a1 = "0"}
+if (a2 == "-"){a2 = "0"}
+a1 = as.numeric(a1)
+a2 = as.numeric(a2)
+if (a3 == "-"){a3 = "0"}
+if (a4 == "-"){a4 = "0"}
+a3 = as.numeric(a3)
+a4 = as.numeric(a4)
+print(a1+a2)
+print(a3+a4)
+res = 100*(a1+a2)/(a3+a4)
+print(res)
+d1 = rbind(d1,res)
+}
+setnames(d1, c('延畢率'))
+d1 = cbind(d106,d1)
+d2 = d1[1:10,]
+d3 = d1[11:20,]
+col1 = heat.colors(10)
+col2 = topo.colors(10)
+ggplot(data=d2, aes(x=d2$"科系名稱", y=d2$"延畢率")) +geom_bar(stat="identity",fill = col1)
+ggplot(data=d3, aes(x=d3$"科系名稱", y=d3$"延畢率")) +geom_bar(stat="identity",fill = col2)
